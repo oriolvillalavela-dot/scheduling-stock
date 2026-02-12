@@ -1,14 +1,13 @@
 # Lab Plate & Stock Assistant
 
-A specialized web application for designing high-throughput experimentation (HTE) plates and calculating reagent stock solutions. This tool assists researchers in visualizing 96-well plate layouts, normalizing chemical structures (SMILES), and generating printable PDF guides for laboratory workflows.
+A specialized web application for designing high-throughput experimentation (HTE) plates and calculating reagent stock solutions. This tool assists in visualizing 24/48/96-well plate layouts and generating printable PDF guides for laboratory workflows.
 
 ## Features
 
-- **Interactive Plate Visualization**: Dynamic 96-well plate views mapping Aryl and Alkyl components.
-- **Stock Solution Calculator**: Automated planning for reagent stocks based on daily experimental needs.
-- **PDF Generation**: Export printer-friendly PDFs for both plate layouts and stock preparation instructions.
-- **Chemical Normalization**: Automatic cleaning and normalization of chemical data (IDs, SMILES, Types) from Excel inputs.
-- **Flexible Data Input**: driven by standard Excel files (`chemicals.xlsx`, `reactions.xlsx`) with fallback to demo data.
+- **Interactive Plate Visualization**: Dynamic 24/48/96-well plate views mapping reaction components.
+- **Stock Solution Calculator**: Automated planning for reagent stocks based on daily schedule.
+- **PDF Generation**: Export PDFs for both plate layouts and stock preparation instructions.
+- **Chemical Normalization**: Automatic calculation and normalization of chemical data (IDs, SMILES, Molar Weights and Plate configuration) from Excel inputs.
 
 ## Architecture
 
@@ -22,7 +21,6 @@ The application follows a modern client-server architecture:
 
 - **Python**: 3.9+ (Verified with Python 3.x)
 - **Node.js**: 18+ (Recommended for frontend build)
-- **Browser**: Modern web browser (Chrome, Firefox, Edge)
 
 ## Quickstart (Local Development)
 
@@ -43,13 +41,13 @@ python -m venv .venv
 # Windows:
 .venv\Scripts\activate
 # macOS/Linux:
-# source .venv/bin/activate
+source .venv/bin/activate
 
 # Install dependencies
 pip install -r requirements.txt
 
 # Start the development server
-uvicorn app.main:app --reload
+python -m uvicorn app.main:app --host 127.0.0.1 --port 8000
 ```
 The backend will start at `http://127.0.0.1:8000`. You can verify it is running by visiting `http://127.0.0.1:8000/docs` for the interactive API documentation.
 
@@ -87,12 +85,6 @@ VITE_API_URL=http://your-backend-url:8000
 
 The application reads data from Excel files located in `backend/app/data/`. If these files are missing, the system will load built-in demo data.
 
-| File | Description | Expected Columns (Minimal) |
-|------|-------------|----------------------------|
-| `chemicals.xlsx` | Chemical library data | `ID`, `Type` (aryl/alkyl), `SMILES` OR `Aryl-ID`, `SMILES`, `Alkyl-ID`, `SMILES` |
-| `reactions.xlsx` | Experimental layout | `day_number`, `plate_in_day`, `well`, `is_control`, `Aryl-ID`, `Alkyl-ID` |
-| `reagents.xlsx` | Reagent properties | `Name`, `SMILES` |
-
 ## API Reference
 
 The backend provides the following REST endpoints:
@@ -104,17 +96,6 @@ The backend provides the following REST endpoints:
 
 Detailed interactive documentation is available at `/docs` when the backend is running.
 
-## Usage Examples
-
-**Generate a Plate PDF (via CLI)**
-You can interact with the API directly using `curl`:
-
-```bash
-curl -X POST "http://127.0.0.1:8000/api/plate/pdf" \
-     -H "Content-Type: application/json" \
-     -d '{"title": "Test Plate", "grid": {"rows": 4, "cols": 6, "cells": []}}' \
-     --output plate.pdf
-```
 
 ## Project Structure
 
@@ -140,27 +121,13 @@ library_plates/
 
 ## Screenshots
 
-<!-- Use relative paths for screenshots -->
-<!-- ![Plate View](docs/screenshots/plate_view.png) -->
-<!-- ![Stock Plan](docs/screenshots/stock_plan.png) -->
+![Plate Preview](docs/screenshots/plate.png)
 
-*Active screenshots coming soon.*
+![Stock Solutions](docs/screenshots/stocks1.png)
 
-## License & Citation
+![Pipetting Scheme](docs/screenshots/stocks2.png)
 
-<!-- TODO: Add a specific license (e.g., MIT, Apache 2.0) -->
-This project is currently unlicensed.
+## Acknowledgements
 
-**How to Cite**
-
-If you use this software in your research, please cite it as follows:
-
-```bibtex
-@software{lab_plate_assistant,
-  title = {Lab Plate & Stock Assistant},
-  author = {Villalao},
-  year = {2026},
-  version = {1.0-thesis},
-  url = {https://github.com/yourusername/library_plates}
-}
-```
+- **Author**: Oriol Villa Lavela
+- **Affiliation**: [Roche]
